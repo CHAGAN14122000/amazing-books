@@ -1,0 +1,41 @@
+server:
+  port: 8181
+  
+spring:
+  application:
+    name: api-gateway
+  profiles:
+    active: dev
+  config: 
+    import : "optional:configserver:"
+  cloud:
+    config:
+      uri: http://host.docker.internal:8070 
+    gateway:
+      routes:
+        - id: book-service
+          uri: lb://book-service
+          predicates:
+            - Path=/bookms/**
+        - id: issuer-service
+          uri: lb://issuer-service
+          predicates:
+            - Path=/issuerms/**
+        - id: oauth-server
+          uri: lb://oauth-server
+          predicates:
+            - Path=/oauth/**, /login/**
+          filters:
+            - RewriteLocationResponseHeader=AS_IN_REQUEST, Location, ,
+    
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://host.docker.internal:8761/eureka/
+      
+    
+     
+      
+

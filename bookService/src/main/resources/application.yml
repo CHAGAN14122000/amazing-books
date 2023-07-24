@@ -1,0 +1,62 @@
+server:
+  servlet:
+    context-path: /bookms
+  port: 8080
+
+message: "Hello from book-test-service" 
+  
+spring:
+  application:
+    name: bookService
+  profiles:
+    active:
+    - dev
+    - prod
+  config: 
+    import : "optional:configserver:"
+  cloud:
+    config:
+      enabled: true
+      uri: http://host.docker.internal:8070
+      label: main
+
+  datasource:
+    url: jdbc:h2:mem:books-db
+    username: booksapp
+    password: password
+    driverClassName: org.h2.Driver
+  jpa:
+    spring.jpa.database-platform: org.hibernate.dialect.H2Dialect
+      
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+      health:
+        show-details: always  
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://host.docker.internal:8761/eureka/
+  instance:
+    prefer-ip-address: true
+      
+security:
+  oauth2:
+    resource:
+      token-info-uri: http://host.docker.internal:8030/oauth/check_token//
+      token-type: Bearer
+    client:
+      client-id: bookapp
+      client-secret: 123456
+      grant-type: client_credentials
+      scope: read
+      
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+     

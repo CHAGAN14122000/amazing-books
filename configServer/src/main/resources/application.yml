@@ -1,0 +1,22 @@
+server:
+  port: 8070
+  
+spring:
+  application:
+    name: config-server
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/geistFahrer/amazing-book-ms-config-repo
+          default-label: main
+          search-paths:
+          - bookService
+          - issuer-service
+          - apiGateway
+          - oauth-server
+          - service-registry
+
+logging:
+  level:         
+    root: DEBUG      

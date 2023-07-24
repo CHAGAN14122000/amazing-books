@@ -1,0 +1,19 @@
+server:
+  port: 8761
+
+spring:
+  application:
+    name: service-registry
+  profiles:
+    active: dev
+  config: 
+    import : "optional:configserver:"
+  cloud:
+    config:
+      uri: http://host.docker.internal:8070  
+  
+eureka:
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+  
